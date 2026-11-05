@@ -1,7 +1,6 @@
 import os
 import smtplib
 from email.message import EmailMessage
-from segredos import senha
 import re
 
 
@@ -11,18 +10,18 @@ import re
 def emailAuto(Dest):
 
     #config Email
-    EMAIL_ADDRESS = 'leonardohenriq123@gmail.com'
-    EMAIL_PASSWORD = senha
+    EMAIL_ADDRESS = os.environ['EMAIL_ADDRESS']
+    EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
 
     msg = EmailMessage()
     msg['Subject'] = 'VAGA DE EMPREGO'
-    msg['From'] = 'leonardo@c3i.com.br'
+    msg['From'] = EMAIL_ADDRESS
     msg['To'] = Dest
     msg.set_content('Segue em anexo meu curriculum vitae.')
 
-    with open('D:\python\emailAuto\emailAttach\CV2.pdf', 'rb') as content_file:
+    with open(os.environ.get('CV_PATH', 'emailAttach/CV.pdf'), 'rb') as content_file:
         content = content_file.read()
-        msg.add_attachment(content, maintype='application', subtype='pdf', filename='Leonardo_Henrique_Lemos_Silva_-_Currículo.pdf')
+        msg.add_attachment(content, maintype='application', subtype='pdf', filename=os.environ.get('CV_FILENAME', 'Curriculo.pdf'))
 
 
     #send Email
